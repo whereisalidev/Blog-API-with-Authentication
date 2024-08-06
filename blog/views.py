@@ -14,6 +14,7 @@ class BlogAPI(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
+
     def get(self, request):
         try:
             blogs = Blog.objects.filter(user = request.user)
@@ -24,6 +25,7 @@ class BlogAPI(APIView):
             return Response({'message': f'Blogs fetched successfully for {request.user}', 'data': serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'data': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
     def post(self, request):
         try:
@@ -38,10 +40,11 @@ class BlogAPI(APIView):
             print(f'Exception {e}')
             return Response({'data': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
+
     def patch(self, request):
         try:
             data = request.data
-            blog = Blog.objects.filter(uuid = data.get['uuid'])
+            blog = Blog.objects.filter(uuid = data['uuid'])
 
             if not blog.exists():
                 return Response({'message': 'Invalid Blog UUID'}, status=status.HTTP_400_BAD_REQUEST)
@@ -56,14 +59,16 @@ class BlogAPI(APIView):
             
             serializer.save()
 
-            return Response({'message': ' Blog updated Successfully', 'data': serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'Blog updated Successfully', 'data': serializer.data}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             print(f'Exception {e}')
             return Response({'data': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
 
+
 class AllBlogsAPI(APIView):
+
     def get(self, request):
         blogs = Blog.objects.all()
         if request.GET.get('search'):
