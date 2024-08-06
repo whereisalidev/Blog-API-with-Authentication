@@ -13,7 +13,14 @@ class BlogAPI(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
-    
+    def get(self, request):
+        try:
+            blogs = Blog.objects.filter(user = request.user)
+            serializer = BlogSerializer(blogs, many=True)
+            return Response({'message': f'Blogs fetched successfully for {request.user}', 'data': serializer.data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'data': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
     def post(self, request):
         try:
             data = request.data
