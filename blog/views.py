@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .serializers import BlogSerializer, AllBlogsSerializer
 from .models import Blog
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -16,6 +17,10 @@ class BlogAPI(APIView):
     def get(self, request):
         try:
             blogs = Blog.objects.filter(user = request.user)
+
+            if request.GET.get('search'):
+                search = request.GET.get('search')
+                blogs = blogs.filter(Q(title__icontains = search))
             serializer = BlogSerializer(blogs, many=True)
             return Response({'message': f'Blogs fetched successfully for {request.user}', 'data': serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
