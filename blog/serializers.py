@@ -10,4 +10,8 @@ class BlogSerializer(serializers.ModelSerializer):
         exclude = ["created_at"]
 
 
+class AllBlogsSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = Blog
+        exclude = ['created_at']

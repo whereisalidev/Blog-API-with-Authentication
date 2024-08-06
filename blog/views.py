@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import BlogSerializer
+from .serializers import BlogSerializer, AllBlogsSerializer
 from .models import Blog
 from rest_framework.views import APIView
 from rest_framework import status
@@ -31,5 +31,5 @@ class BlogAPI(APIView):
 class AllBlogsAPI(APIView):
     def get(self, request):
         blogs = Blog.objects.all()
-        serializer = BlogSerializer(blogs, many=True)
-        return Response({serializer.data})
+        serializer = AllBlogsSerializer(blogs, many=True)
+        return Response(serializer.data)
