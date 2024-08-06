@@ -40,13 +40,26 @@ class BlogAPI(APIView):
         
     def patch(self, request):
         try:
+            data = request.data
+            blog = Blog.objects.filter(uuid = data.get['uuid'])
+
+            if not blog.exists():
+                return Response({'message': 'Invalid Blog UUID'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if request.user != blog[0].user:
+                return Response({'message': 'You are not Authorized for this updation'}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            serializer = BlogSerializer(blog[0], data = data, partial = True)
+
+            if not serializer.is_valid():
+                return Response({'message'})
 
 
         except Exception as e:
             print(f'Exception {e}')
             return Response({'data': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
-        
+
 class AllBlogsAPI(APIView):
     def get(self, request):
         blogs = Blog.objects.all()
