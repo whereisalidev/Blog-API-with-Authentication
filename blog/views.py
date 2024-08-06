@@ -18,9 +18,9 @@ class BlogAPI(APIView):
         try:
             blogs = Blog.objects.filter(user = request.user)
 
-            if request.GET.get('search'):
-                search = request.GET.get('search')
-                blogs = blogs.filter(Q(title__icontains = search))
+            # if request.GET.get('search'):
+            #     search = request.GET.get('search')
+            #     blogs = blogs.filter(Q(title__icontains = search))
             serializer = BlogSerializer(blogs, many=True)
             return Response({'message': f'Blogs fetched successfully for {request.user}', 'data': serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -43,5 +43,8 @@ class BlogAPI(APIView):
 class AllBlogsAPI(APIView):
     def get(self, request):
         blogs = Blog.objects.all()
+        if request.GET.get('search'):
+                search = request.GET.get('search')
+                blogs = blogs.filter(Q(title__icontains = search))
         serializer = AllBlogsSerializer(blogs, many=True)
         return Response(serializer.data)
