@@ -17,7 +17,6 @@ class BlogAPI(APIView):
     def get(self, request):
         try:
             blogs = Blog.objects.filter(user = request.user)
-
             # if request.GET.get('search'):
             #     search = request.GET.get('search')
             #     blogs = blogs.filter(Q(title__icontains = search))
