@@ -37,8 +37,16 @@ class BlogAPI(APIView):
         except Exception as e:
             print(f'Exception {e}')
             return Response({'data': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def patch(self, request):
+        try:
 
 
+        except Exception as e:
+            print(f'Exception {e}')
+            return Response({'data': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
 class AllBlogsAPI(APIView):
     def get(self, request):
         blogs = Blog.objects.all()
