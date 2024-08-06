@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import RegisterSerializer, LoginSerializer
 # from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class RegisterAPI(APIView):
@@ -26,6 +27,6 @@ class LoginAPI(APIView):
         refresh = RefreshToken.for_user(user)
         return Response({
             'message': 'User login Successfully',
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            # 'refresh': str(refresh),
+            'token': str(refresh.access_token),
         }, status=status.HTTP_200_OK)

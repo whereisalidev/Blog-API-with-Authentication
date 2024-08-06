@@ -7,4 +7,7 @@ class BlogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Blog
-        exclude = "created_at"
+        exclude = ["created_at"]
+
+
+
