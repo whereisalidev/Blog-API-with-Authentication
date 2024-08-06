@@ -52,8 +52,11 @@ class BlogAPI(APIView):
             serializer = BlogSerializer(blog[0], data = data, partial = True)
 
             if not serializer.is_valid():
-                return Response({'message'})
+                return Response({'message': 'Something went wrong', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer.save()
 
+            return Response({'message': ' Blog updated Successfully', 'data': serializer.data}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             print(f'Exception {e}')
