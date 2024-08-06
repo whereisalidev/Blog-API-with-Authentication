@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import RegisterSerializer, LoginSerializer
-from rest_framework.authtoken.models import Token
+# from rest_framework.authtoken.models import Token
 
 
 class RegisterAPI(APIView):
@@ -23,5 +23,9 @@ class LoginAPI(APIView):
         if not serializer.is_valid():
             return Response({'message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         user = User.objects.get(email=data['email'])
-        token, _ = Token.objects.get_or_create(user=user)
-        return Response({'message': 'User login Successfully', 'token': str(token)}, status=status.HTTP_200_OK)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'message': 'User login Successfully',
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }, status=status.HTTP_200_OK)
